@@ -10,33 +10,32 @@ def Read():
     input("Please enter...")
     file.close()
 
-    def Write():
-        path=input("Enter the path of the file you want to write or create:")
-        if os.path.isfile(path):
-            print("Rebuilding the existing file")
-        else:
-                print("Creating the new file")
-                text=input("Write something:")
-                file.open(path,"w")
-                file.write(text)
+def Write():
+    path=input("Enter the path of the file you want to write or create:")
+    if os.path.isfile(path):
+        print("Rebuilding the existing file")
+    else:
+        print("Creating the new file")
+        text=input("Write something:")
+        file.open(path,"w")
+        file.write(text)
 
-                def Add():
-                    file=input("Enter the file path")
-                    text=input("Enter the text to add")
-                    file.open(path,"a")
-                    file.write('\n'+text)
+def Add():
+    file=input("Enter the file path")
+    text=input("Enter the text to add")
+    file.open(path,"a")
+    file.write('\n'+text)
 
-                    def Delete():
-                        path=input("Enter the file you want to delete")
-                        if os.path.exists(path):
-                            print("File found")
-                            os.remove(path)
-                            print("File has been deleted")
-                        else:
-                            print("File does not exist")
+def Delete():
+    path=input("Enter the file you want to delete")
+    if os.path.exists(path):
+        print("File found")
+        os.remove(path)
+        print("File has been deleted")
+    else:
+        print("File does not exist")
 
-                            #List directories 
-                            def Dirlist():
+#List directories ## #def Dirlist():
                                 path=input("Enter the file directory path to display")
                                 sortlist=sorted(os.listdir(path))
                                 i = 0
