@@ -1,142 +1,58 @@
-import shutil
 import os
 import time
-import subprocess
 
-def Read():
-    path=input("Enter the file path to read:")
-    file=open(path,"r")
-    print(file.read())
-    input("Please enter...")
-    file.close()
+class FileMananger:
+    def __init__(self,f_name:str,f_mode="a+"):
+        self.f_name = f_name
+        self.f_mode = f_mode
+        self.file = None
 
-def Write():
-    path=input("Enter the path of the file you want to write or create:")
-    if os.path.isfile(path):
-        print("Rebuilding the existing file")
-    else:
-        print("Creating the new file")
-        text=input("Write something:")
-        file.open(path,"w")
-        file.write(text)
+    def __enter__(self):
+        try:
+            self.file = open(self.f_name,self.f_mode)
+            return self
+        except:
+            self.createFile()
+            return self
 
-def Add():
-    file=input("Enter the file path")
-    text=input("Enter the text to add")
-    file.open(path,"a")
-    file.write('\n'+text)
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.file.close()
 
-def Delete():
-    path=input("Enter the file you want to delete")
-    if os.path.exists(path):
-        print("File found")
-        os.remove(path)
-        print("File has been deleted")
-    else:
-        print("File does not exist")
+    def createFile(self):
+        if os.path.isfile(self.f_name):
+            pass
+        else:
+            create_file = self.file = open(self.f_name,"w+")
+            if create_file:
+                print(f"Created `{self.f_name}` file. \n File mode ` {self.f_mode} .")
 
-#List directories ## #def Dirlist():
-                                path=input("Enter the file directory path to display")
-                                sortlist=sorted(os.listdir(path))
-                                i = 0
-                                while(i<len(sortlist)):
-                                    print(sortlist[i]+'\n')
-                                    i+=1
+    def deleteFile(self):
+        file_to_del = os.remove(self.f_name)
+        if file_to_del == None:
+            print(f"Removed `{self.f_name}` file.")
 
-                                    def Check():
-                                        fp=int(input('Check existence of\n 1.File \n 2.Directory\n'))
-                                        if fp == 1:
-                                            path=input("Enter the file path:")
-                                            os.path.isfile(path)
-                                            if os.path.isfile(path) == True:
-                                                print("File found")
-                                            else:
-                                                print("File was not found")
-                                                if fp == 2:
-                                                    path=input("Enter the directory path:")
-                                                    os.path.isdir(path)
-                                                    if os.pah.isdir(path) == True:
-                                                        print("Directory found")
-                                                    else:
-                                                        print("Directory not found")
+    def writeToFile(self,txt):
+        if self.file.closed == False:
+            self.file.write(txt)
+            print(f"`{txt}` added to `{self.f_name}` .")
 
-                                                        def Move():
-                                                            path1=input("Enter the source path of the file to move")
-                                                            mr=int(input('\n Rename \n Move \n'))
-                                                            if mr == 1:
-                                                                path2=input("Enter the destination and the filename")
-                                                                shutil.move(path1,path2)
-                                                                print("File renamed")
-                                                                if mr == 2:
-                                                                    path2 = input("Enter the path to move")
-                                                                    shutil.move(path1,path2)
-                                                                    print("File moved successfully")
+    def readFile(self):
+        if self.file.closed == False and os.path.isfile(self.f_name):
+            lines = self.file.readlines()
+            items: list = list()
+            for line in lines:
+                item = line.split(';')
+                items.append({"name":item[0],"price":item[1],"quantity":item[2]})
 
-                                                                    def Copy():
-                                                                        path = input("Enter the path of the file to copy or rename")
-                                                                        path2=input("Enter the path to copy to:")
-                                                                        shutil.copy(path1,path2)
-                                                                        print("File copied successfully")
+            return items
 
-                                                                        def Makedir():
-                                                                           path=input("Enter the path directory with the name \n eg C:\\users\Documents\mybooks\nWhere Newdir is new directory:")
-                                                                           os.makedirs(path)
-                                                                           print("Directory was successfully created")
-
-                                                                           def Removedir():
-                                                                               path=input("Enter the path of the directory you want to remove")
-                                                                               treedir=int(input('\n 1.Deleted directory \n 2.Delete directory tree \n 3.Exit \n'))
-                                                                               if treedir == 1:
-                                                                                   os.rmdir(path)
-                                                                                   if treedir == 2:
-                                                                                       shutil.rmtree(path)
-                                                                                       print("Directory was deleted sucesssfully")
-                                                                                       if treedir == 3:
-                                                                                           exit()
-
-                                                                                           def Openfile():
-                                                                                               path=input("Enter the apth of the file")
-                                                                                               try:
-                                                                                                   os.startfile(path)
-                                                                                               except:
-                                                                                                       print("File was not found")
-
-                                                                                                       run=1
-                                                                                                       while(run==1):
-                                                                                                           try:
-                                                                                                               os.system('clear')
-                                                                                                           except OSError:
-                                                                                                               os.system('cls')
-                                                                                                               print("########File Manager in python 3.9#########")
-                                                                                                               print("The current time and date is :",time.asctime())
-                                                                                                               print('\n Choose the option number: \n')
-                                                                                                               dec=int(input('"1.Read a file \n 2.Create a file \n 3. Append text to a file \n 4.Delete a file \n List files in a directory \n6.Check a file existence \n7 Move a file \n 8. Copy a file \n 9.Create a directory \n 10.Delete a directory \n11. Open a program\n 12.Exit" '))
-                                                                                                               if dec==1:
-                                                                                                                   Read()
-                                                                                                                   if dec==2:
-                                                                                                                       Write()
-                                                                                                                       if dec==3:
-                                                                                                                           Add()
-                                                                                                                           if dec==4:
-                                                                                                                               Delete()
-                                                                                                                               if dec==5:
-                                                                                                                                   Dirlist()
-                                                                                                                                   if dec==6:
-                                                                                                                                       Check()
-                                                                                                                                       if dec==7:
-                                                                                                                                           Move()
-                                                                                                                                           if dec==8:
-                                                                                                                                               Copy()
-                                                                                                                                               if dec==9:
-                                                                                                                                                   Makedir()
-                                                                                                                                                   if dec == 10:
-                                                                                                                                                       Removedir()
-                                                                                                                                                       if dec == 11:
-                                                                                                                                                           Openfile()
-                                                                                                                                                           if dec == 12:
-                                                                                                                                                               exit()
-                                                                                                                                                               run=int(input("\n 1. Return to main menu \n 2.Exit \n"))
-                                                                                                                                                               if run == 2:
-                                                                                                                                                                   exit()
-
-                                                                                                                                                                   #The project is complete let run now
+if __name__ == "__main__":
+    file_mananger = FileMananger("log.txt", "r+")
+    file_mananger.createFile()
+    with file_mananger as fs:
+        fs.writeToFile("Indomie;40;2\n")
+    with file_mananger as flm:
+        my_shopping_list = flm.readFile()
+    print(my_shopping_list)
+    time.sleep(7)
+    file_mananger.deleteFile()
